@@ -110,6 +110,7 @@ def reverse(data, scaler):
     return pre
 
 def predict(model, dataframe, n_steps_in, n_steps_out, scaler):
+    print('开始预测')
     dataset_x, sc_x_real = get_data(dataframe, n_steps_in, n_steps_out)
     # sc_y = train_get_scaler(96, 8, '2h')
     dataset = TensorDataset(torch.tensor(dataset_x))
