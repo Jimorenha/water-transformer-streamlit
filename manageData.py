@@ -8,7 +8,7 @@ import streamlit as st
 
 '''获取用于训练的数据集的归一化尺度'''
 # 划分数据集
-def get_train_test(datapath, n_steps_in, n_steps_out, option):
+def get_train_test(datapath, n_steps_in, n_steps_out):
     data = pd.read_csv(datapath)
     # 除去第一列时间列
     data = data.iloc[:, 1:]
@@ -27,29 +27,17 @@ def get_train_test(datapath, n_steps_in, n_steps_out, option):
             seq_x, seq_y = data[i:end_ix, :], data[end_ix:out_end_ix, -13:]
             '''2_20-21年2个区域（长时间）用于部署的数据'''
             # 20年2月13至21年3月7为训练集
-            if option == '2h':
-                if k <= 45506:
-                    train_x.append(seq_x)
-                    train_y.append(seq_y)
-                # 21年3月7至21年5月7为验证集
-                elif k > 45506 and k <= 45794:
-                    valid_x.append(seq_x)
-                    valid_y.append(seq_y)
-                # 21年5月7至21年6月7为测试集
-                else:
-                    test_x.append(seq_x)
-                    test_y.append(seq_y)
-            elif option == '1day':
-                if k <= 37345:
-                    train_x.append(seq_x)
-                    train_y.append(seq_y)
-                elif k > 37345 and k <= 43201:
-                    valid_x.append(seq_x)
-                    valid_y.append(seq_y)
-                else:
-                    test_x.append(seq_x)
-                    test_y.append(seq_y)
-
+            if k <= 45506:
+                train_x.append(seq_x)
+                train_y.append(seq_y)
+            # 21年3月7至21年5月7为验证集
+            elif k > 45506 and k <= 45794:
+                valid_x.append(seq_x)
+                valid_y.append(seq_y)
+            # 21年5月7至21年6月7为测试集
+            else:
+                test_x.append(seq_x)
+                test_y.append(seq_y)
             k = k + 1
     train, valid, test = [train_x, train_y], [valid_x, valid_y], [test_x, test_y]
     return array(train_x), array(train_y), array(valid_x), array(valid_y), array(test_x), array(test_y)
@@ -68,9 +56,8 @@ def train_minmaxscaler(train, valid, test):
     return traiN, valiD, tesT, sc
 
 # 获取划分了数据集后归一化的数据
-def train_get_data(datapath, n_steps_in, n_steps_out, option):
-    train_x, train_y, valid_x, valid_y, test_x, test_y = get_train_test(datapath, n_steps_in, n_steps_out, option)
-    print(train_x.shape,train_y.shape,valid_x.shape)
+def train_get_data(datapath, n_steps_in, n_steps_out):
+    train_x, train_y, valid_x, valid_y, test_x, test_y = get_train_test(datapath, n_steps_in, n_steps_out)
     # 特征数据x归一化
     # _X经过归一化后的三维特征数据，sc_X特征列的归一化属性
     train_X, valid_X, test_X, sc_X = train_minmaxscaler(train_x, valid_x, test_x)
@@ -82,10 +69,10 @@ def train_get_data(datapath, n_steps_in, n_steps_out, option):
 
 # 获取训练集的归一化尺度
 @st.cache
-def train_get_scaler(n_steps_in, n_steps_out, option):
+def train_get_scaler(n_steps_in, n_steps_out):
     print('计算原训练模型的归一化尺度')
     datapath = 'datasets/20-21(13).csv'
-    train_x, train_y, valid_x, valid_y, test_x, test_y, sc_x, sc_y = train_get_data(datapath, n_steps_in, n_steps_out, option)
+    train_x, train_y, valid_x, valid_y, test_x, test_y, sc_x, sc_y = train_get_data(datapath, n_steps_in, n_steps_out)
     return sc_y
 
 '''获取用于训练的数据集的归一化尺度'''
