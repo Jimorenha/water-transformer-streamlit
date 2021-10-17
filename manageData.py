@@ -68,7 +68,6 @@ def train_get_data(datapath, n_steps_in, n_steps_out):
     return train_X, train_Y, valid_X, valid_Y, test_X, test_Y, sc_X, sc_Y
 
 # 获取训练集的归一化尺度
-@st.cache
 def train_get_scaler(n_steps_in, n_steps_out):
     print('计算原训练模型的归一化尺度')
     datapath = 'datasets/20-21(13).csv'
