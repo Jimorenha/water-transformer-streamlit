@@ -28,6 +28,7 @@ time_1day = 96*2
 model_2h = "models/" + 'weather96_8' + ".pth"
 model_1day = "models/" + 'weather21_13(96X2_96)' + ".pth"
 
+sys.stdout.flush()
 print('----------------------------------------------------')
 print('运行时间为:')
 print(beijing_now, beijing_now.tzname())
@@ -51,6 +52,7 @@ t = st.time_input('时间点：', dt.time(12, 00))
 date_time = datetime.combine(d, t)
 st.write('*历史水量数据的最后日期时间点为:*', date_time)
 
+sys.stdout.flush()
 print('*******对进入模型的真实时间和预测时间进行整理********')
 # 2day—->2h
 actual_end_time_2h = date_time
@@ -58,6 +60,7 @@ actual_end_time_2h = date_time
 actual_start_time_2h = actual_end_time_2h - dt.timedelta(minutes=15 * (time_2h-1))
 # actual_start_time_2h
 actual_date_2h = pd.date_range(actual_start_time_2h, actual_end_time_2h, freq='15MIN')
+sys.stdout.flush()
 print('预测未来两小时——真实数据开始时间为：{},真实数据结束时间为：{}，时间长度为：{}'.format(actual_start_time_2h, actual_end_time_2h, len(actual_date_2h)))
 
 predict_start_time_2h = actual_end_time_2h + dt.timedelta(minutes=15)
@@ -66,6 +69,7 @@ predict_end_time_2h = actual_end_time_2h + dt.timedelta(minutes=15 * 8)
 # predict_end_time_2h
 predict_date_2h = pd.date_range(predict_start_time_2h, predict_end_time_2h, freq='15MIN')
 # predict_date_2h
+sys.stdout.flush()
 print('预测未来两小时——预测数据开始时间为：{},预测数据结束时间为：{}，时间长度为：{}'.format(predict_start_time_2h, predict_end_time_2h, len(predict_date_2h)))
 
 # 7day—->1day
@@ -75,6 +79,7 @@ actual_start_time_1day = actual_end_time_1day - dt.timedelta(minutes=15 * (time_
 # actual_start_time_1day
 actual_date_1day = pd.date_range(actual_start_time_1day, actual_end_time_1day, freq='15MIN')
 # print(len(actual_date_1day))
+sys.stdout.flush()
 print('预测未来一天——真实数据开始时间为：{},真实数据结束时间为：{}，时间长度为：{}'.format(actual_start_time_1day, actual_end_time_1day, len(actual_date_1day)))
 
 predict_start_time_1day = actual_end_time_1day + dt.timedelta(minutes=15)
@@ -83,6 +88,7 @@ predict_end_time_1day = actual_end_time_1day + dt.timedelta(minutes=15 * 96)
 # predict_end_time_1day
 predict_date_1day = pd.date_range(predict_start_time_1day, predict_end_time_1day, freq='15MIN')
 # predict_date_1day
+sys.stdout.flush()
 print('预测未来一天——预测数据开始时间为：{},预测数据结束时间为：{}，时间长度为：{}'.format(predict_start_time_1day, predict_end_time_1day, len(predict_date_1day)))
 print('*******对进入模型的真实时间和预测时间进行整理完成********')
 
