@@ -217,14 +217,16 @@ else:
         try:
             st.markdown('### 3.1 预测未来两小时')
             st.write(f'*预测未来两小时数据时间段为：{predict_start_time_2h}到{predict_end_time_2h}*')
+            # 计算反归一化尺度
+            sc_y = manageData.train_get_scaler(96, 8)
             # 1day-->2h
             # 加载模型
-            print('**************2h模型开始*************')
+            print('****************************2h模型开始***************************')
             model_predict2h = run_model3.load_model(model_2h)
             # 预测未来2h（8条）
             # 预测时间范围
             ori_df_2h = model_2h_df
-            pre_2h = run_model3.predict(model_predict2h, model_2h_df, n_steps_in=time_2h, n_steps_out=8)
+            pre_2h = run_model3.predict(model_predict2h, model_2h_df, n_steps_in=time_2h, n_steps_out=8, scaler=sc_y)
             # 添加时间列
             pre_2h.insert(0, 'date', predict_date_2h)
             st.markdown('#### 3.1.1 全部区域未来2小时（8条）预测需水量')
@@ -296,19 +298,19 @@ else:
             area_water.markdown('### 渝北三级')
             YBSJ = plt_df_1.iloc[:, 13]
             area_water.line_chart(YBSJ)
-            print('**************2h模型完毕*************')
+            print('****************************2h模型完毕***************************')
 
 
             # 7day-->1day
             st.markdown('### 3.2 预测未来一天')
             st.write(f'*预测未来一天数据时间段为：{predict_start_time_1day}到{predict_end_time_1day}*')
             # 加载模型
-            print('**************1day模型开始*************')
+            print('****************************1day模型开始***************************')
             model_predict1day = run_model4.load_model(model_1day)
             # 预测未来2h（8条）
             # 预测时间范围
             ori_df_1day = model_1day_df
-            pre_1day = run_model4.predict(model_predict1day, model_1day_df, n_steps_in=time_1day, n_steps_out=96)
+            pre_1day = run_model4.predict(model_predict1day, model_1day_df, n_steps_in=time_1day, n_steps_out=96, scaler=sc_y)
             # print(pre_1day)
             # 添加时间列
             pre_1day.insert(0, 'date', predict_date_1day)
@@ -381,6 +383,6 @@ else:
             area_water_7.markdown('### 渝北三级')
             YBSJ = plt_df_7.iloc[:, 13]
             area_water_7.line_chart(YBSJ)
-            print('**************1day模型完毕*************')
+            print('****************************1day模型完毕***************************')
         except ValueError:
             st.error('请检查数据历史水量数据的最后日期时间点！！！')
