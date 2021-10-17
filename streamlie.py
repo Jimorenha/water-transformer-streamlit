@@ -170,10 +170,6 @@ if uploaded_file is not None:
     check_1day = result_1day[result_1day.isnull().T.any()]
     check_data.write(check_2h)
     check_data.write(check_1day)
-    print('预测2h整理数据：')
-    print(check_2h)
-    print('预测1day整理数据：')
-    print(check_1day)
 
     st.write(f'*真实一天数据时间段为：{actual_start_time_2h}到{actual_end_time_2h}*')
     water_2h = st.beta_expander("显示整理真实一天数据")
