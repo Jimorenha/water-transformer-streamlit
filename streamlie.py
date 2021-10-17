@@ -105,7 +105,7 @@ if weather_path is not None:
     # weather_all
 
 st.markdown('### 1.3 请上传水量数据:')
-st.markdown('***（注意：<font color=#f63366>将相应新天气数据填入模板</font>。请在水量数据每个分区最后日期时间点后加上<kbd>END</kbd>作为结束标志。'
+st.markdown('***（注意：<font color=#f63366>将相应新水量数据填入模板</font>。请在水量数据每个分区最后日期时间点后加上<kbd>END</kbd>作为结束标志。'
          '例：若最后日期时间点为12:00，请在12:15单元格处输入<kbd>END</kbd>）***', unsafe_allow_html=True)
 uploaded_file = st.file_uploader(label="请按照模板xls格式上传", type='xls', key='water')
 if uploaded_file is None:
@@ -339,8 +339,6 @@ else:
             b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
             href = f'<a href="data:file/csv;base64,{b64}">下载真实2天+预测一天全部区域水势绘制对应数据</a> (右键链接另存为&lt;some_name&gt;.csv)'
             st.markdown(href, unsafe_allow_html=True)
-
-            # if st.checkbox('显示真实2天+预测2小时全部区域水势绘制对应数据'):
 
             st.markdown('#### 3.2.3 真实2天+预测一天单个区域水势绘制')
             area_water_7 = st.beta_expander("单个区域水势绘制")
