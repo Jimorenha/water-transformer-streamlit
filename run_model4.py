@@ -29,7 +29,7 @@ chunk_mode = None
 d_input = 21 # From dataset
 d_model = 100  # Lattent dim
 d_output = 13 # From dataset
-n_steps_in = 96*8 # 输入时间维度
+n_steps_in = 96*2 # 输入时间维度
 n_steps_out = 96 # 输出时间维度
 
 # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -109,9 +109,9 @@ def reverse(data, scaler):
                             '梁沱二级-兰家院子', '梁沱二级-松树桥', '江北二级', '渝北二级', '渝北三级', '悦来二级', '悦来三级-翠云', '梁沱三级', '江茶三级']
     return pre
 
-def predict(model, dataframe, n_steps_in, n_steps_out):
+def predict(model, dataframe, n_steps_in, n_steps_out, scaler):
     dataset_x, sc_x_real = get_data(dataframe, n_steps_in, n_steps_out)
-    sc_y = train_get_scaler(n_steps_in, n_steps_out, '2h')
+    # sc_y = train_get_scaler(96, 8, '2h')
     dataset = TensorDataset(torch.tensor(dataset_x))
     datasetloader = DataLoader(dataset,
                                      batch_size=BATCH_SIZE,
@@ -128,9 +128,9 @@ def predict(model, dataframe, n_steps_in, n_steps_out):
             netout = model(X.to(device)).cpu()
             predictions[idx_prediction:idx_prediction + X.shape[0]] = netout
             idx_prediction += X.shape[0]
-    print(predictions)
+    print('predictions的形状为：{}'.format(predictions.shape))
     print('----------------预测完毕-------------')
-    pre = reverse(predictions, sc_y)
+    pre = reverse(predictions, scaler)
     print('----------------反归一化完毕--------------')
     # 修改按文件sheet顺序读取的列顺序
     pre = pre[['悦来二级', '悦来三级-鹿山', '悦来三级-翠云', '悦来四级', '梁悦四级-人和', '悦来五级', '梁沱二级-兰家院子', '梁沱二级-松树桥', '梁沱三级', '江北二级', '江茶三级',
