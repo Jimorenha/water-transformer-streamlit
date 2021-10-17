@@ -25,7 +25,7 @@ beijing_now = utc_now.astimezone(SHA_TZ)
 time_2h = 96
 time_1day = 96*2
 
-model_2h = "models/" + 'weather21_13(96_8)' + ".pth"
+model_2h = "models/" + 'weather96_8' + ".pth"
 model_1day = "models/" + 'weather21_13(96X2_96)' + ".pth"
 
 print('----------------------------------------------------')
