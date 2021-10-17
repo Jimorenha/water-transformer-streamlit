@@ -217,8 +217,6 @@ else:
         try:
             st.markdown('### 3.1 预测未来两小时')
             st.write(f'*预测未来两小时数据时间段为：{predict_start_time_2h}到{predict_end_time_2h}*')
-            # 计算反归一化尺度
-            sc_y = manageData.train_get_scaler(96, 8)
             # 1day-->2h
             # 加载模型
             print('****************************2h模型开始***************************')
@@ -226,7 +224,7 @@ else:
             # 预测未来2h（8条）
             # 预测时间范围
             ori_df_2h = model_2h_df
-            pre_2h = run_model3.predict(model_predict2h, model_2h_df, n_steps_in=time_2h, n_steps_out=8, scaler=sc_y)
+            pre_2h = run_model3.predict(model_predict2h, model_2h_df, n_steps_in=time_2h, n_steps_out=8)
             # 添加时间列
             pre_2h.insert(0, 'date', predict_date_2h)
             st.markdown('#### 3.1.1 全部区域未来2小时（8条）预测需水量')
@@ -310,7 +308,7 @@ else:
             # 预测未来2h（8条）
             # 预测时间范围
             ori_df_1day = model_1day_df
-            pre_1day = run_model4.predict(model_predict1day, model_1day_df, n_steps_in=time_1day, n_steps_out=96, scaler=sc_y)
+            pre_1day = run_model4.predict(model_predict1day, model_1day_df, n_steps_in=time_1day, n_steps_out=96)
             # print(pre_1day)
             # 添加时间列
             pre_1day.insert(0, 'date', predict_date_1day)
@@ -339,6 +337,8 @@ else:
             b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
             href = f'<a href="data:file/csv;base64,{b64}">下载真实2天+预测一天全部区域水势绘制对应数据</a> (右键链接另存为&lt;some_name&gt;.csv)'
             st.markdown(href, unsafe_allow_html=True)
+
+            # if st.checkbox('显示真实2天+预测2小时全部区域水势绘制对应数据'):
 
             st.markdown('#### 3.2.3 真实2天+预测一天单个区域水势绘制')
             area_water_7 = st.beta_expander("单个区域水势绘制")
