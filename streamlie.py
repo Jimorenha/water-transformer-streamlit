@@ -1,4 +1,3 @@
-import sys
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -204,6 +203,7 @@ st.success('② 已选择七天（96*2条）预测未来一天（96条）有天�
 # model= "models/" + style_name + ".pth"
 
 st.markdown('## 3. 预测结果')
+sc_x, sc_y = manageData.train_get_scaler(96, 8)
 clicked = st.button('显示预测结果')
 if weather_path is None:
     st.error('还未上传天气数据')
@@ -221,7 +221,7 @@ else:
             # 预测未来2h（8条）
             # 预测时间范围
             ori_df_2h = model_2h_df
-            pre_2h = run_model3.predict(model_predict2h, model_2h_df, n_steps_in=time_2h, n_steps_out=8)
+            pre_2h = run_model3.predict(model_predict2h, model_2h_df, n_steps_in=time_2h, n_steps_out=8, sc_x=sc_x, sc_y=sc_y)
             # 添加时间列
             pre_2h.insert(0, 'date', predict_date_2h)
             st.markdown('#### 3.1.1 全部区域未来2小时（8条）预测需水量')
@@ -305,7 +305,7 @@ else:
             # 预测未来2h（8条）
             # 预测时间范围
             ori_df_1day = model_1day_df
-            pre_1day = run_model4.predict(model_predict1day, model_1day_df, n_steps_in=time_1day, n_steps_out=96)
+            pre_1day = run_model4.predict(model_predict1day, model_1day_df, n_steps_in=time_1day, n_steps_out=96, sc_x=sc_x, sc_y=sc_y)
             # print(pre_1day)
             # 添加时间列
             pre_1day.insert(0, 'date', predict_date_1day)
