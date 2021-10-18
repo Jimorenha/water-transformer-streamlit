@@ -71,19 +71,19 @@ def get_dataset(dataframe, n_steps_in, n_steps_out):
     dataset = [dataset_x]
     return np.array(dataset_x)
 
-def minmaxscaler(data):
-    sc = MinMaxScaler()
+def minmaxscaler(data, sc_x):
+    # sc = MinMaxScaler()
     # sc_经过归一化后的二维数据
-    sc_data = sc.fit_transform(data.reshape((-1, data.shape[-1])))
+    sc_data = sc_x.transform(data.reshape((-1, data.shape[-1])))
     # X转换成原来的三维数据
     datA = sc_data.reshape(data.shape)
-    return datA, sc
+    return datA, sc_x
 
-def get_data(dataframe, n_steps_in, n_steps_out):
+def get_data(dataframe, n_steps_in, n_steps_out, sc_x):
     dataset_x = get_dataset(dataframe, n_steps_in, n_steps_out)
     # 特征数据x归一化
     # _X经过归一化后的三维特征数据，sc_X特征列的归一化属性
-    dataset_X, sc_X = minmaxscaler(dataset_x)
+    dataset_X, sc_X = minmaxscaler(dataset_x, sc_x)
     # 特征数据y归一化
     # _Y经过归一化后的三维特征数据，sc_Y特征列的归一化属性
     return dataset_X, sc_X
@@ -109,9 +109,9 @@ def reverse(data, scaler):
                             '梁沱二级-兰家院子', '梁沱二级-松树桥', '江北二级', '渝北二级', '渝北三级', '悦来二级', '悦来三级-翠云', '梁沱三级', '江茶三级']
     return pre
 
-def predict(model, dataframe, n_steps_in, n_steps_out):
-    dataset_x, sc_x_real = get_data(dataframe, n_steps_in, n_steps_out)
-    sc_y = train_get_scaler(96, 8)
+def predict(model, dataframe, n_steps_in, n_steps_out, sc_x, sc_y):
+    dataset_x, sc_x_real = get_data(dataframe, n_steps_in, n_steps_out, sc_x)
+    # sc_y = train_get_scaler(96, 8)
     dataset = TensorDataset(torch.tensor(dataset_x))
     datasetloader = DataLoader(dataset,
                                      batch_size=BATCH_SIZE,
