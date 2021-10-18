@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import base64
+import io
 import datetime as dt
 from datetime import datetime
 from datetime import timedelta
@@ -227,10 +228,12 @@ else:
             st.markdown('#### 3.1.1 全部区域未来2小时（8条）预测需水量')
             pre_2h
             # 下载全部区域未来2小时（8条）预测需水量
-            csv = pre_2h.to_csv(index=False)
-            b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-            href = f'<a href="data:file/csv;base64,{b64}">下载全部区域未来2小时（8条）预测需水量</a> (右键链接另存为&lt;some_name&gt;.csv)'
-            st.markdown(href, unsafe_allow_html=True)
+            towrite = io.BytesIO()
+            downloaded_file = pre_2h.to_excel(towrite, encoding='utf-8', index=False, header=True)
+            towrite.seek(0)  # reset pointer
+            b64 = base64.b64encode(towrite.read()).decode()  # some strings
+            linko = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="2h.xlsx">下载全部区域未来2小时（8条）预测需水量</a>'
+            st.markdown(linko, unsafe_allow_html=True)
             # 绘图
             plot_df_1 = pd.concat([ori_df_2h, pre_2h], axis=0)
             # 调整列顺序
@@ -246,11 +249,12 @@ else:
             plot_data_day_2h = st.beta_expander("真实1天+预测2小时全部区域水势绘制对应数据")
             plot_data_day_2h.write(plt_df_1)
             # 下载真实2天+预测2小时全部区域水势绘制对应数据
-            csv = plt_df_1.to_csv(index=False)
-            b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-            href = f'<a href="data:file/csv;base64,{b64}">下载真实1天+预测2小时全部区域水势绘制对应数据</a> (右键链接另存为&lt;some_name&gt;.csv)'
-            st.markdown(href, unsafe_allow_html=True)
-            # if st.checkbox('显示真实2天+预测2小时全部区域水势绘制对应数据'):
+            towrite = io.BytesIO()
+            downloaded_file = plt_df_1.to_excel(towrite, encoding='utf-8', index=False, header=True)
+            towrite.seek(0)  # reset pointer
+            b64 = base64.b64encode(towrite.read()).decode()  # some strings
+            linko = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="1day+2h.xlsx">下载真实1天+预测2小时全部区域水势绘制对应数据</a>'
+            st.markdown(linko, unsafe_allow_html=True)
 
             st.markdown('#### 3.1.3 真实1天+预测2小时单个区域水势绘制')
             area_water = st.beta_expander("单个区域水势绘制")
@@ -312,10 +316,12 @@ else:
             st.markdown('#### 3.2.1 全部区域未来一天（96条）预测需水量')
             pre_1day
             # 下载全部区域未来一天（96条）预测需水量
-            csv = pre_1day.to_csv(index=False)
-            b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-            href = f'<a href="data:file/csv;base64,{b64}">下载全部区域未来一天（96条）预测需水量</a> (右键链接另存为&lt;some_name&gt;.csv)'
-            st.markdown(href, unsafe_allow_html=True)
+            towrite = io.BytesIO()
+            downloaded_file = pre_1day.to_excel(towrite, encoding='utf-8', index=False, header=True)
+            towrite.seek(0)  # reset pointer
+            b64 = base64.b64encode(towrite.read()).decode()  # some strings
+            linko = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="1day.xlsx">下载全部区域未来一天（96条）预测需水量</a>'
+            st.markdown(linko, unsafe_allow_html=True)
             # 绘图
             plot_df_7 = pd.concat([ori_df_1day, pre_1day], axis=0)
             # 调整列顺序
@@ -330,12 +336,12 @@ else:
             plot_data_7day_1day = st.beta_expander("真实2天+预测一天全部区域水势绘制对应数据")
             plot_data_7day_1day.write(plt_df_7)
             # 下载真实7天+预测一天全部区域水势绘制对应数据
-            csv = plt_df_7.to_csv(index=False)
-            b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-            href = f'<a href="data:file/csv;base64,{b64}">下载真实2天+预测一天全部区域水势绘制对应数据</a> (右键链接另存为&lt;some_name&gt;.csv)'
-            st.markdown(href, unsafe_allow_html=True)
-
-            # if st.checkbox('显示真实2天+预测2小时全部区域水势绘制对应数据'):
+            towrite = io.BytesIO()
+            downloaded_file = plt_df_7.to_excel(towrite, encoding='utf-8', index=False, header=True)
+            towrite.seek(0)  # reset pointer
+            b64 = base64.b64encode(towrite.read()).decode()  # some strings
+            linko = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="2day+1day.xlsx">下载真实2天+预测一天全部区域水势绘制对应数据</a>'
+            st.markdown(linko, unsafe_allow_html=True)
 
             st.markdown('#### 3.2.3 真实2天+预测一天单个区域水势绘制')
             area_water_7 = st.beta_expander("单个区域水势绘制")
